@@ -8,6 +8,8 @@ Kartly is an online shopping center developed using the Next.js framework. It al
 
 - **Caching:TanStack Query:** Improving the UX
 
+- **State management**: React composition and passing props
+
 - **CSS framework: Tailwind**: UI design consistency
 
 - **Code formatting and quality: Prettier and Git-hooks** Maintaining code quality and consistency
