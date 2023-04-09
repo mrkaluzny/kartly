@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .primary-bg-color {
+    @apply bg-black;
+  }
+
+  .primary-text-color {
+    @apply text-black;
+  }
+
+  .secondary-bg-color {
+    @apply bg-blue-600;
+  }
+
+  .secondary-text-color {
+    @apply text-blue-600;
+  }
+
+  .primary-border-color {
+    @apply border-black;
+  }
+
+  .primary-badge {
+    @apply h-7 top-0 left-0 px-2 py-1 font-bold primary-bg-color text-center;
+  }
+
+  .card:hover .link {
+    @apply primary-bg-color text-white;
+  }
+}
