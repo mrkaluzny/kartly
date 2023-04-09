@@ -2,12 +2,19 @@ import LoadingProductCard from "@/components/loadingProductCard";
 import NoProductMessage from "@/components/noProductMessage";
 import ProductCard from "@/components/productCard";
 import ProductCardsContainer from "@/components/productCardsContainer";
+import SearchProducts from "@/components/searchProducts";
 import { useProducts } from "@/hooks/useProducts";
 import { Product } from "@/types/product";
+import { filterProducts } from "@/utils/filter-products";
 import ErrorPage from "next/error";
+import { useState } from "react";
 
 const Home = (): JSX.Element => {
+  const [productSearchQuery, setProductSearchQuery] = useState<string>("");
+
   const { data: products, isLoading, error } = useProducts();
+
+  const filteredProducts = filterProducts(products, productSearchQuery);
 
   if (error) {
     return (
@@ -20,13 +27,17 @@ const Home = (): JSX.Element => {
   }
   return (
     <>
+      <SearchProducts
+        productSearchQuery={productSearchQuery}
+        setProductSearchQuery={setProductSearchQuery}
+      />
       <ProductCardsContainer>
         {isLoading ? (
           Array.from({ length: 10 }).map((_, index) => (
             <LoadingProductCard key={index} />
           ))
-        ) : products?.length ? (
-          products?.map((product: Product) => (
+        ) : filteredProducts.length ? (
+          filteredProducts.map((product: Product) => (
             <ProductCard key={product.id} {...product} />
           ))
         ) : (
