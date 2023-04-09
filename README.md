@@ -64,3 +64,7 @@ The file structure of the app is as the following directories:
 - TanStack Query: To fetch and cache data
 
 - Git-flow: Git branching model
+
+## Screenshot
+
+<img src="./kartly-lg-screenshot.png" width="1920">
