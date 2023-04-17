@@ -8,23 +8,25 @@ import { Product } from "@/types/product";
 import { filterProducts } from "@/utils/filter-products";
 import ErrorPage from "next/error";
 import { useState } from "react";
+import { requestProducts } from "@/utils/request-products";
 
-const Home = (): JSX.Element => {
+const Home = ({ data: products }: { data: Product[] }): JSX.Element => {
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
 
-  const { data: products, isLoading, error } = useProducts();
+  // const { data: products, isLoading, error } = useProducts();
 
   const filteredProducts = filterProducts(products, productSearchQuery);
 
-  if (error) {
-    return (
-      <ErrorPage
-        title="There was an error retrieving the products. Please refresh the page and try again"
-        statusCode={404}
-        withDarkMode={false}
-      />
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <ErrorPage
+  //       title="There was an error retrieving the products. Please refresh the page and try again"
+  //       statusCode={404}
+  //       withDarkMode={false}
+  //     />
+  //   );
+  // }
+
   return (
     <>
       <SearchProducts
@@ -32,19 +34,32 @@ const Home = (): JSX.Element => {
         setProductSearchQuery={setProductSearchQuery}
       />
       <ProductCardsContainer>
-        {isLoading ? (
-          Array.from({ length: 10 }).map((_, index) => (
-            <LoadingProductCard key={index} />
-          ))
-        ) : filteredProducts.length ? (
-          filteredProducts.map((product: Product) => (
-            <ProductCard key={product.id} {...product} />
-          ))
-        ) : (
-          <NoProductMessage message="No product found!" />
-        )}
+        {
+          //  isLoading ? (
+          //    Array.from({ length: 10 }).map((_, index) => (
+          //      <LoadingProductCard key={index} />
+          //    ))
+          //  ) :
+          filteredProducts.length ? (
+            filteredProducts.map((product: Product) => (
+              <ProductCard key={product.id} {...product} />
+            ))
+          ) : (
+            <NoProductMessage message="No product found!" />
+          )
+        }
       </ProductCardsContainer>
     </>
   );
 };
 export default Home;
+
+export async function getServerSideProps() {
+  const data = await requestProducts();
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
