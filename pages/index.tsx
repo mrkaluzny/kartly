@@ -9,13 +9,25 @@ import { filterProducts } from "@/utils/filter-products";
 import ErrorPage from "next/error";
 import { useState } from "react";
 import { requestProducts } from "@/utils/request-products";
+import { Category } from "@/types/category";
+import { formatCategory } from "@/utils/format-category";
+import { getCategoryName } from "@/utils/get-category-name";
 
 const Home = ({ data: products }: { data: Product[] }): JSX.Element => {
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
+  const [userSelectCategory, setUserSelectCategory] = useState<string>("");
+
+  const handleCategoryClick = (category: Category) => {
+    setUserSelectCategory(category);
+  };
 
   // const { data: products, isLoading, error } = useProducts();
 
-  const filteredProducts = filterProducts(products, productSearchQuery);
+  const filteredProducts = filterProducts({
+    products,
+    productSearchQuery,
+    userSelectCategory,
+  });
 
   // if (error) {
   //   return (
@@ -33,6 +45,38 @@ const Home = ({ data: products }: { data: Product[] }): JSX.Element => {
         productSearchQuery={productSearchQuery}
         setProductSearchQuery={setProductSearchQuery}
       />
+
+      <div className="flex gap-2 my-10 justify-center">
+        <button
+          onClick={() => setUserSelectCategory("")}
+          className={`${
+            userSelectCategory === "" && "primary-bg-color text-white"
+          } border primary-border-color primary-text-color p-2 font-boldx`}
+        >
+          All
+        </button>
+        {Object.values(Category).map((category) => {
+          const categoryBackgrounds =
+            {
+              [Category.MEN]: "text-cyan-300",
+              [Category.WOMEN]: "text-pink-300",
+              [Category.ELECTRONICS]: "text-slate-300",
+              [Category.JEWELERY]: "text-yellow-300",
+            }[category] || "";
+          return (
+            <button
+              key={category}
+              className={`${categoryBackgrounds} border primary-border-color p-2 font-bold ${
+                userSelectCategory === category && "primary-bg-color"
+              }`}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {formatCategory(getCategoryName(category))}
+            </button>
+          );
+        })}
+      </div>
+
       <ProductCardsContainer>
         {
           //  isLoading ? (
