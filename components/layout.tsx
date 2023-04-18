@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import Footer from "@/components/footer";
-import Topbar from "@/components/Topbar";
+import Topbar from "@/components/topbar";
 
 const Layout = ({ children }: PropsWithChildren): JSX.Element => (
   <div className="container mx-auto px-5">

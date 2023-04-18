@@ -1,6 +1,7 @@
 import { Category } from "@/types/category";
 import { CategoryBadgeProps } from "@/types/category-badge-props";
 import { getCategoryName } from "@/utils/get-category-name";
+import { formatCategory } from "@/utils/format-category";
 
 const CategoryBadge = ({ category }: CategoryBadgeProps): JSX.Element => {
   const categoryName = getCategoryName(category);
@@ -14,7 +15,7 @@ const CategoryBadge = ({ category }: CategoryBadgeProps): JSX.Element => {
 
   return (
     <small className={`${categoryBackgrounds} absolute primary-badge`}>
-      {categoryName}
+      {formatCategory(categoryName)}
     </small>
   );
 };
