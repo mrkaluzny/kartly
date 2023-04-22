@@ -6,13 +6,17 @@ import SearchProducts from "@/components/searchProducts";
 import { useProducts } from "@/hooks/useProducts";
 import { Product } from "@/types/product";
 import { filterProducts } from "@/utils/filter-products";
+import { requestProducts } from "@/utils/request-products";
 import ErrorPage from "next/error";
 import { useState } from "react";
 
-const Home = (): JSX.Element => {
+const Home = ({ initialProducts }): JSX.Element => {
+  console.log(initialProducts);
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
 
-  const { data: products, isLoading, error } = useProducts();
+  const { data: products, isLoading, error } = useProducts(initialProducts);
+
+  console.log("products", products);
 
   const filteredProducts = filterProducts(products, productSearchQuery);
 
@@ -32,7 +36,7 @@ const Home = (): JSX.Element => {
         setProductSearchQuery={setProductSearchQuery}
       />
       <ProductCardsContainer>
-        {isLoading ? (
+        {isLoading && !filteredProducts ? (
           Array.from({ length: 10 }).map((_, index) => (
             <LoadingProductCard key={index} />
           ))
@@ -47,4 +51,13 @@ const Home = (): JSX.Element => {
     </>
   );
 };
+
+export async function getStaticProps() {
+  const initialProducts = await requestProducts();
+  return {
+    props: {
+      initialProducts,
+    },
+  };
+}
 export default Home;
