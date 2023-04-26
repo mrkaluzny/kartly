@@ -9,12 +9,14 @@ import { filterProducts } from "@/utils/filter-products";
 import { requestProducts } from "@/utils/request-products";
 import ErrorPage from "next/error";
 import { useState } from "react";
-import { requestProducts } from "@/utils/request-products";
+// import { requestProducts } from "@/utils/request-products";
 import { Category } from "@/types/category";
 import { formatCategory } from "@/utils/format-category";
 import { getCategoryName } from "@/utils/get-category-name";
 
-const Home = ({ initialProducts }): JSX.Element => {
+export type HomeProps = { initialProducts: Product[] };
+
+const Home = ({ initialProducts }: HomeProps): JSX.Element => {
   console.log(initialProducts);
   const [productSearchQuery, setProductSearchQuery] = useState<string>("");
   const [userSelectCategory, setUserSelectCategory] = useState<string>("");
@@ -27,11 +29,10 @@ const Home = ({ initialProducts }): JSX.Element => {
     setUserSelectCategory(category);
   };
 
-
   // const { data: products, isLoading, error } = useProducts();
 
   const filteredProducts = filterProducts({
-    products,
+    products: products ?? [],
     productSearchQuery,
     userSelectCategory,
   });
@@ -111,12 +112,12 @@ export async function getStaticProps() {
 }
 export default Home;
 
-export async function getServerSideProps() {
-  const data = await requestProducts();
+// export async function getServerSideProps() {
+//   const data = await requestProducts();
 
-  return {
-    props: {
-      data,
-    },
-  };
-}
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
